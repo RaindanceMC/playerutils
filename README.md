@@ -15,7 +15,7 @@ Needs Java 25 and read access to `packages.tstieh.de` (server ids `packages-rele
 
 ## Plugins
 
-- `playerutils-standalone/target/RainsPlayerUtils-0.4.0.jar` — also published as `de.raindancer.modules:playerutils-standalone:0.4.0`
+- `playerutils-standalone/target/RainsPlayerUtils-0.4.1.jar` — also published as `de.raindancer.modules:playerutils-standalone:0.4.1`
 
 ## Versions
 

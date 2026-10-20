@@ -33,7 +33,8 @@
              0.4.0: network: /position (/whereis) finds a player on another server and says which, and where they stand;
              /spectate <player> on another server takes you there and resumes watching on arrival, the way back leading
              to the server you left. -->
-        <plugin.version>0.4.0</plugin.version>
+        <!-- 0.4.1: /fly is Core's fly lease — flying out of a claim ends the claim's flight even when /fly was on when they walked in; /fly in a flying claim turns your own flight on. Needs RainsCore with Flight.FLY. -->
+        <plugin.version>0.4.1</plugin.version>
     </properties>
 
     <dependencies>

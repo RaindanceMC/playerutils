@@ -1,5 +1,6 @@
 package de.raindancer.modules.playerutils.service;
 
+import de.raindancer.core.world.movement.Flight;
 import de.raindancer.core.world.movement.Footing;
 import de.raindancer.core.RainsCore;
 import de.raindancer.core.moderation.players.Outcome;
@@ -18,6 +19,9 @@ import java.util.concurrent.ConcurrentHashMap;
  * Flight that is <em>given</em> rather than toggled for the moment: it outlasts a relog, a death, a world
  * change and a gamemode change, because the game drops {@code allowFlight} on every one of them and a player
  * who was given flight should not have to ask again each time. Taken away mid-air, the landing is soft.
+ *
+ * <p>It is Core's {@link Flight#FLY} lease, never the switch itself: flight a claim lends must neither count as
+ * {@code /fly} nor outlive the claim because {@code /fly} was on when they walked in.
  */
 public final class FlightService implements IPlayerUtilsService {
 
@@ -46,7 +50,7 @@ public final class FlightService implements IPlayerUtilsService {
     }
 
     public Change set(Player target, String state) {
-        boolean now = target.getAllowFlight();
+        boolean now = core.flight().hasOwnFlight(target);
         boolean wanted = rule.wanted(state, now);
         boolean persist = settings.flightPersists();
         Scheduling.onOwner(plugin, target, () -> FlightMarks.grant(target, wanted && persist));
@@ -66,10 +70,11 @@ public final class FlightService implements IPlayerUtilsService {
         if (!settings.flightPersists()) {
             return false;
         }
-        if (!rule.shouldRestore(FlightMarks.isGranted(player), player.getGameMode().name(), player.getAllowFlight())) {
+        boolean held = core.flight().holds(player.getUniqueId(), Flight.FLY) && player.getAllowFlight();
+        if (!rule.shouldRestore(FlightMarks.isGranted(player), player.getGameMode().name(), held)) {
             return false;
         }
-        player.setAllowFlight(true);
+        core.flight().grant(player, Flight.FLY);
         return true;
     }
 
