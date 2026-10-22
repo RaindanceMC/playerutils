@@ -128,6 +128,9 @@ playerutils:
   ping:
     self: "<gray>Your ping: <white><ms> ms</white> <bars> <grade>"
     done: "<gray><player>'s ping: <white><ms> ms</white> <bars> <grade>"
+    gone: "<gray><player> left <ago>; their last ping: <white><ms> ms</white> <bars> <grade>"
+    window: "  <hover:show_text:'<gray>Last <window>: <white><samples></white> samples over <covered>\n<gray>median <white><median> ms</white>\n<trend>'><gray><window> <dark_gray>│</dark_gray> Ø <avg> <dark_gray>│</dark_gray> <min><gray>–</gray><max> ms <dark_gray>│</dark_gray> <gray>95% <p95> <dark_gray>│</dark_gray> <gray>±<white><jitter></white></hover>"
+    trend: "  <gray><window> <trend> <dark_gray>(<low>–<high> ms)"
 
   status:
     header: "<gold>━━ <white><player></white> <gray>(<name>)</gray> ━━"

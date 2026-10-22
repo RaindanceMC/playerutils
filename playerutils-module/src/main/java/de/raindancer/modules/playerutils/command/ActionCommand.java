@@ -1,5 +1,6 @@
 package de.raindancer.modules.playerutils.command;
 
+import de.raindancer.core.platform.command.PlayerLookup;
 import de.raindancer.core.platform.command.PlayerTargets;
 import de.raindancer.modules.playerutils.PlayerUtilsServices;
 import de.raindancer.modules.playerutils.model.Action;
@@ -92,6 +93,9 @@ public final class ActionCommand implements IPlayerUtilsCommand {
         if (action == Action.POSITION && reading.target().isPresent() && elsewhere(live, sender, reading.target().get())) {
             return;
         }
+        if (action == Action.PING && reading.target().isPresent() && gone(live, sender, reading.target().get())) {
+            return;
+        }
         List<Player> targets = live.targeting().resolve(sender, reading.target());
         if (targets.isEmpty()) {
             return;
@@ -109,6 +113,25 @@ public final class ActionCommand implements IPlayerUtilsCommand {
             return;
         }
         perform(live, sender, targets, reading);
+    }
+
+    /** Whether the name meant nobody here now but somebody whose pings are still kept, and so was answered from those. */
+    private boolean gone(PlayerUtilsServices live, CommandSender sender, String typed) {
+        if (PlayerTargets.isSelector(typed)) {
+            return false;
+        }
+        PlayerLookup lookup = PlayerTargets.lookup(live.server(), sender, typed);
+        if (!lookup.online().isEmpty()) {
+            return false;
+        }
+        Optional<java.util.UUID> left = live.info().pingedRecently(lookup, typed);
+        if (left.isEmpty()) {
+            return false;
+        }
+        if (live.targeting().mayActAt(sender, action, typed)) {
+            live.info().pingGone(sender, left.get());
+        }
+        return true;
     }
 
     /** Whether the name meant somebody on another server, and so was answered from there. */

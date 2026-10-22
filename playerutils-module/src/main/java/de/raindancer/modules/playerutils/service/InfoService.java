@@ -10,6 +10,8 @@ import de.raindancer.modules.playerutils.PlayerUtilsSettings;
 import de.raindancer.modules.playerutils.model.Action;
 import de.raindancer.modules.playerutils.rules.NearRule;
 import de.raindancer.modules.playerutils.rules.PingRule;
+import de.raindancer.core.moderation.players.PingHistory;
+import de.raindancer.core.platform.util.Times;
 import de.raindancer.modules.playerutils.rules.SpeedRule;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
@@ -117,6 +119,54 @@ public final class InfoService implements IPlayerUtilsService {
         messages.send(sender, self ? "playerutils.ping.self" : "playerutils.ping.done",
                 "player", PlayerTargets.shownName(target), "ms", grade.milliseconds(), "bars", Markup.of(grade.drawn()),
                 "grade", Markup.of("<" + grade.colour() + ">" + grade.label()));
+        pingHistory(sender, target.getUniqueId());
+    }
+
+    /** Whose pings are still kept for what was typed: the one player it named, else whoever last went by that name. */
+    public java.util.Optional<java.util.UUID> pingedRecently(de.raindancer.core.platform.command.PlayerLookup lookup,
+                                                             String typed) {
+        PingHistory history = core.pingHistory();
+        if (lookup.matches().size() == 1) {
+            java.util.UUID named = lookup.matches().getFirst().getUniqueId();
+            if (history.summary(named, PingHistory.KEPT).isPresent()) {
+                return java.util.Optional.of(named);
+            }
+        }
+        return history.recentlySeen(typed);
+    }
+
+    /** The ping history of somebody who left: when, their last reading, and the windows still kept. */
+    public void pingGone(CommandSender sender, java.util.UUID player) {
+        core.pingHistory().summary(player, PingHistory.KEPT).ifPresent(last -> {
+            PingRule.Grade grade = pings.grade(last.latest());
+            messages.send(sender, "playerutils.ping.gone", "player", last.name(), "ago", Times.ago(last.latestAt()),
+                    "ms", grade.milliseconds(), "bars", Markup.of(grade.drawn()),
+                    "grade", Markup.of("<" + grade.colour() + ">" + grade.label()));
+            pingHistory(sender, player);
+        });
+    }
+
+    private static final int TREND_COLUMNS = 30;
+
+    private void pingHistory(CommandSender sender, java.util.UUID player) {
+        List<PingRule.Window> windows = pings.windows(window -> core.pingHistory().summary(player, window));
+        for (PingRule.Window window : windows) {
+            PingHistory.Summary s = window.summary();
+            messages.send(sender, "playerutils.ping.window", "window", window.label(), "samples", s.samples(),
+                    "covered", Times.compact(s.covered().toMillis()), "median", s.median(),
+                    "trend", Markup.of(pings.trend(s, TREND_COLUMNS)), "avg", graded(s.average()),
+                    "min", graded(s.min()), "max", graded(s.max()), "p95", graded(s.p95()), "jitter", s.jitter());
+        }
+        if (!windows.isEmpty()) {
+            PingRule.Window longest = windows.getLast();
+            messages.send(sender, "playerutils.ping.trend", "window", longest.label(),
+                    "trend", Markup.of(pings.trend(longest.summary(), TREND_COLUMNS)),
+                    "low", longest.summary().min(), "high", longest.summary().max());
+        }
+    }
+
+    private Markup graded(int ms) {
+        return Markup.of("<" + pings.grade(ms).colour() + ">" + ms);
     }
 
     private void status(CommandSender sender, Player target, PlayerSnapshot s) {
