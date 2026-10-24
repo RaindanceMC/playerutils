@@ -1,0 +1,55 @@
+id: player-vitals
+title: Heal, feed & hurt
+summary: Heal, feed, damage, starve, drown, breathe, extinguish and ignite — what each does to a player.
+intro: |
+  Bandages and bruises on request. Mind who you point these at.
+icon: GOLDEN_APPLE
+category: Staff
+order: 921
+module: playerutils
+when: "@perm:rainsplayerutils.heal || @perm:rainsplayerutils.feed || @perm:rainsplayerutils.damage || @perm:rainsplayerutils.starve || @perm:rainsplayerutils.drown || @perm:rainsplayerutils.breathe || @perm:rainsplayerutils.extinguish || @perm:rainsplayerutils.ignite"
+aliases: [heal, feed, damage, hurt, starve, drown, breathe, air, extinguish, ext, ignite, burn, health, hunger-set]
+keywords: [hearts, lethal, drumsticks, fire, kill, saturation]
+commands: [heal, feed, damage, starve, drown, breathe, extinguish, ignite]
+related: [player-tools, player-movement, player-danger]
+sections:
+  - question: How do I heal somebody?
+    title: Heal
+    permission: rainsplayerutils.heal
+    text: |
+      {cmd:/heal [player]} restores full health and air.{if:playerutils:heal.cures-bad-effects} It also takes off harmful effects — poison, wither, slowness and the rest — good ones stay.{/if}{if:playerutils:heal.extinguishes} A burning player is put out.{/if} Exempt players can still be healed.
+  - question: How do I feed somebody?
+    title: Feed
+    permission: rainsplayerutils.feed
+    text: |
+      {cmd:/feed [player]} fills hunger and saturation and clears exhaustion.
+  - question: How do I take hearts away?
+    title: Damage
+    permission: rainsplayerutils.damage
+    text: |
+      {cmd:/damage [player] [hearts] [lethal]} (alias {cmd:/hurt}) takes hearts — 0.5 to 1000, five by default. It never kills unless you add <white>lethal</white>, and killing needs the node <white>rainsplayerutils.damage.lethal</white>; without it, or without <white>lethal</white>, you are told it would kill.
+  - question: How do I set hunger?
+    title: Starve
+    permission: rainsplayerutils.starve
+    text: |
+      {cmd:/starve [player] [drumsticks]} sets the hunger bar to 0–10 drumsticks; nothing given empties it.
+  - question: How do I drown somebody?
+    title: Drown
+    permission: rainsplayerutils.drown
+    text: |
+      {cmd:/drown [player] [hearts]} empties their air and takes the hearts (two by default) from the water.
+  - question: How do I give breath back?
+    title: Breathe
+    permission: rainsplayerutils.breathe
+    text: |
+      {cmd:/breathe [player]} (alias {cmd:/air}) refills their air.
+  - question: How do I put someone out?
+    title: Extinguish
+    permission: rainsplayerutils.extinguish
+    text: |
+      {cmd:/extinguish [player]} (alias {cmd:/ext}) puts out the fire. A player who is not burning is told nothing was done.
+  - question: How do I set someone on fire?
+    title: Ignite
+    permission: rainsplayerutils.ignite
+    text: |
+      {cmd:/ignite [player] [seconds]} (alias {cmd:/burn}) sets them alight, 1 to 3600 seconds, five by default.

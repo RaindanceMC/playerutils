@@ -1,0 +1,47 @@
+id: player-tools
+title: Player tools
+summary: /player and every action on a player — how aiming, selectors, exemption and notices work.
+intro: |
+  The staff toolbox: heal, hurt, launch, shrink, watch — all aimed at a player. This page is how aiming works; the next ones are what each command does.
+icon: PLAYER_HEAD
+category: Staff
+order: 920
+module: playerutils
+when: "@perm:rainsplayerutils.tools || @perm:rainsplayerutils.heal || @perm:rainsplayerutils.near || @perm:rainsplayerutils.damage || @perm:rainsplayerutils.fly || @perm:rainsplayerutils.wipe || @perm:rainsplayerutils.sudo"
+aliases: [player, playertools, actions, selectors, exempt, near]
+keywords: [target, aim, "@a", "@p", "@r", nickname, audit, protected]
+commands: [player, near]
+related: [player-vitals, player-movement, player-danger, player-info]
+sections:
+  - question: How do I aim a command?
+    title: Aiming
+    text: |
+      Every action takes a player first: a name, a nickname, or nothing for yourself. {cmd:/heal Lilly} and {cmd:/heal} do what you think. The rest of the words can come in any order — {cmd:/damage 3 Lilly} and {cmd:/damage Lilly 3} are the same, and numbers outside the allowed range are refused with the range named.
+      {cmd:/player <name> <action> …} does any action in one command: {cmd:/player Lilly launch forward 3}.
+  - question: What is the /player page?
+    title: The tools page
+    permission: rainsplayerutils.tools
+    text: |
+      {cmd:/player <name>} opens that player's tools: heal, feed, breathe, put out, damage, starve, flight, speed, launch and more as buttons. {run:/player} alone lets you pick somebody. For a player who has left, the page only offers their profile.
+  - question: Can I hit many players at once?
+    title: Selectors
+    permission: rainsplayerutils.selectors
+    text: |
+      With <white>rainsplayerutils.selectors</white> you may use @a, @p, @r and @e[…]. One command may hit at most {setting:playerutils:selectors.max-targets|count} players — more is refused, so a stray @a cannot heal or wipe the whole server. Afterwards you are told how many it worked on.
+  - question: Why can't I hurt someone?
+    title: Exempt players
+    text: |
+      Anything that hurts or takes away — damage, starve, drown, ignite, launch, wipe, explode, sudo — is refused against players holding <white>rainsplayerutils.exempt</white>. It protects from harm, not from help: an exempt player can still be healed. Staff with <white>rainsplayerutils.exempt.bypass</white> may ignore the protection.
+    permission: rainsplayerutils.damage.others
+  - question: Is the target told?
+    title: Notices
+    permission: rainsplayerutils.heal.others
+    text: |
+      {if:playerutils:notify.targets}Yes: whoever you heal, hurt, launch or resize is told what was done.{else}No — the target is not told, unless it is obvious.{/if}
+      {if:playerutils:notify.targets && playerutils:notify.name-the-actor}The notice names you.{/if}{if:playerutils:notify.targets && !playerutils:notify.name-the-actor}The notice does not say who did it — they hear "somebody".{/if}
+      Every action is also written to the audit log with who, whom and what.
+  - question: Who is near me?
+    title: Near
+    permission: rainsplayerutils.near
+    text: |
+      {cmd:/near [radius]} lists the players around you in your world, nearest first, with the distance in blocks, an arrow showing the direction relative to where you look, and the height difference. The default radius is 200 blocks; at most {setting:playerutils:near.max-radius|count} blocks.

@@ -1,0 +1,42 @@
+id: player-movement
+title: Fly, speed, launch & spectate
+summary: Give flight, change speed or size, throw somebody in the air, or watch a player through their own eyes.
+intro: |
+  Movement tricks for staff. Gravity is a suggestion, on request.
+icon: ELYTRA
+category: Staff
+order: 922
+module: playerutils
+when: "@perm:rainsplayerutils.fly || @perm:rainsplayerutils.speed || @perm:rainsplayerutils.launch || @perm:rainsplayerutils.spectate || @perm:rainsplayerutils.scale"
+aliases: [fly, speed, launch, yeet, spectate, watch, scale, size, flight]
+keywords: [flying, walk, fly speed, shrink, grow, spectator, throw]
+commands: [fly, speed, launch, spectate, scale]
+related: [player-tools, player-vitals, player-danger]
+sections:
+  - question: How do I let somebody fly?
+    title: Fly
+    permission: rainsplayerutils.fly
+    text: |
+      {cmd:/fly [player] [on|off]} — without on or off it toggles. {if:playerutils:flight.persists}Given flight lasts: it survives relogs, deaths, world changes and game mode changes until somebody takes it away.{else}Given flight does not outlast a relog, a death or a game mode change.{/if} {if:playerutils:flight.soft-landing}Taken away mid-air, the landing is soft — no fall damage.{else}Taken away mid-air, the fall hurts.{/if}
+      Flight lent by something else (a claim, say) is not touched: you are told the player can still fly.
+  - question: How do I change speed?
+    title: Speed
+    permission: rainsplayerutils.speed
+    text: |
+      {cmd:/speed [player] [walk|fly|both] [level]} with a level from 0 to 10, 1 being normal. Without walk or fly it picks what the player does right now (flying or walking); {cmd:/speed [player] reset} sets both back to normal.
+  - question: How do I throw someone in the air?
+    title: Launch
+    permission: rainsplayerutils.launch
+    text: |
+      {cmd:/launch [player] [up|forward|look] [power]} (alias {cmd:/yeet}) — up is straight up, forward is the way they face lifted a little, look is exactly where they look, including down. Power is 0.1 to 10, two by default.
+  - question: How do I resize a player?
+    title: Scale
+    permission: rainsplayerutils.scale
+    text: |
+      {cmd:/scale [player] [size]} (alias {cmd:/size}) from 0.0625 to 16, 1 being normal; {cmd:/scale [player] reset} puts it back.
+  - question: How do I watch somebody?
+    title: Spectate
+    permission: rainsplayerutils.spectate
+    text: |
+      {cmd:/spectate <player>} (alias {cmd:/watch}) takes you to them and shows the world through their eyes. {cmd:/spectate stop} puts you back exactly where and as what you were. The way back is written down before anything changes, so a crash or relog while watching still returns you next time you join.
+      You keep following if they change worlds, and you can watch somebody on another server of the network — you travel there, and back. If they leave, spectating ends.

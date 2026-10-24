@@ -1,0 +1,33 @@
+id: player-danger
+title: Wipe, explode & sudo
+summary: The dangerous ones — wipe, explode and sudo — with their safety switches.
+intro: |
+  Here be dragons, and TNT. Everything on this page is audited, and some of it asks twice.
+icon: TNT
+category: Staff
+order: 923
+module: playerutils
+when: "@perm:rainsplayerutils.wipe || @perm:rainsplayerutils.explode || @perm:rainsplayerutils.sudo"
+aliases: [wipe, explode, boom, sudo, confirm]
+keywords: [clear inventory, advancements, experience, ender chest, blast, impersonate, run as]
+commands: [wipe, explode, sudo]
+related: [player-tools, player-vitals, player-movement]
+sections:
+  - question: How do I wipe a player?
+    title: Wipe
+    permission: rainsplayerutils.wipe
+    text: |
+      {cmd:/wipe [player] [inventory] [enderchest] [advancements] [xp] [effects] [all]}. Without parts it takes inventory, advancements and experience; <white>all</white> also takes the ender chest and effects. This is permanent.
+      {if:playerutils:wipe.confirm}It asks first: you must add <white>confirm</white>, or confirm in the window you get.{else}It does not ask first on a single player.{/if} Hitting more than one player always needs <white>confirm</white>.
+  - question: How do I make a bang?
+    title: Explode
+    permission: rainsplayerutils.explode
+    text: |
+      {cmd:/explode [player] [power] [blocks] [fire]} (alias {cmd:/boom}) — power 0.5 to 16, two by default. By default it hurts but breaks nothing.
+      {if:playerutils:explode.blocks-allowed}<white>blocks</white> lets the blast break blocks, and needs <white>rainsplayerutils.explode.blocks</white>.{else}Breaking blocks is switched off on this server whatever you type.{/if} <white>fire</white> may start fires and needs <white>rainsplayerutils.explode.fire</white>.
+  - question: How do I make someone say something?
+    title: Sudo
+    permission: rainsplayerutils.sudo
+    text: |
+      {if:playerutils:sudo.enabled}{cmd:/sudo <player> <command or message>} makes them run the command, or say something in chat if you start with <white>c:</white> or <white>chat:</white>. Operators can only be targeted with <white>rainsplayerutils.sudo.ops</white>, and you cannot sudo yourself.
+      Some commands are never run as somebody else: {setting:playerutils:sudo.blocked}. The check ignores slashes and namespaces, so /minecraft:op is still op. Every use is audited with the exact line.{else}Sudo is switched off on this server.{/if}

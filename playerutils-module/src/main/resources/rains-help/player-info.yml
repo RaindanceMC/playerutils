@@ -1,0 +1,48 @@
+id: player-info
+title: Ping, status & position
+summary: Check your connection, your health, hunger, effects and where you stand — and look people up.
+intro: |
+  Is it the server, or is it you? Let us find out. These commands tell you how things are going — for you, and for anybody who lets you ask.
+icon: CLOCK
+category: Getting around
+order: 30
+module: playerutils
+aliases: [ping, lag, status, hunger, effects, position, pos, coords, whereis, pstatus, profile]
+keywords: [latency, connection, ms, jitter, coordinates, xyz, chunk, biome, saturation, potion]
+commands: [ping, status, hunger, effects, position]
+related: [basics]
+sections:
+  - question: How is my ping?
+    title: Ping
+    text: |
+      {run:/ping} tells you how long your connection takes to answer, in milliseconds, with five bars and a word: excellent under 50, good under 100, okay under 150, laggy under 250, bad under 400, dreadful above that.
+      Below it come the last minute, ten minutes and hour as averages, the lowest and highest, a 95 % value and the jitter (how much it wobbles), plus a little graph. Hover a line for more. A line only appears once you have been here long enough to fill it.
+  - question: Can I see someone else's ping?
+    title: Their ping
+    text: |
+      Yes: {cmd:/ping <player>}. It also works for somebody who left just a moment ago — you then get their last reading and when they left.
+  - question: What does /status show?
+    title: Status
+    text: |
+      {run:/status} is the whole card: health and absorption, hunger and saturation, air, experience level and progress, game mode, flight and speeds, size, where you are, ping, client and language, what you are doing, armour, how long you have been burning, when you first came, how long you have played and how often you died. Effects are counted, not listed — {run:/effects} lists them.
+  - question: How hungry am I, really?
+    title: Hunger
+    text: |
+      {run:/hunger} shows your hunger in drumsticks, your saturation and your exhaustion. Saturation is the hidden buffer that is used up before the drumsticks go down; exhaustion is what fills it from the other side.
+  - question: Which effects do I have?
+    title: Effects
+    text: |
+      {run:/effects} lists every potion effect on you with its level and how much time is left, or says there is none.
+  - question: Where am I?
+    title: Position
+    text: |
+      {run:/position} (also {cmd:/pos}, {cmd:/coords}, {cmd:/whereis}) gives your world, coordinates, the way you face (with yaw and pitch), your chunk and your biome.
+      Asking about <i>somebody else</i> is a staff privilege; it works for somebody on another server of the network too, telling you which server they are on.
+  - question: How do I look at another player?
+    title: Looking people up
+    text: |
+      {cmd:/player <name>} opens their profile. Staff with the right permission get the tools page for that player instead.
+  - question: Why am I told "not yours to use"?
+    title: Others
+    text: |
+      Every command here works on yourself for everybody. Asking about <i>others</i> is allowed for ping; status, hunger, effects and position on somebody else are for staff.
