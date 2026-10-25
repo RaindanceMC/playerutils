@@ -34,7 +34,8 @@
              /spectate <player> on another server takes you there and resumes watching on arrival, the way back leading
              to the server you left. -->
         <!-- 0.4.1: /fly is Core's fly lease — flying out of a claim ends the claim's flight even when /fly was on when they walked in; /fly in a flying claim turns your own flight on. Needs RainsCore with Flight.FLY. -->
-        <plugin.version>0.6.0</plugin.version>
+        <!-- 0.7.0: screens for /screen — everybody's own ping and the server's ping board (RainsCore 2.10). -->
+        <plugin.version>0.7.0</plugin.version>
     </properties>
 
     <dependencies>

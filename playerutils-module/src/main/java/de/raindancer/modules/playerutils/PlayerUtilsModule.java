@@ -35,7 +35,7 @@ import java.util.UUID;
 
 public final class PlayerUtilsModule implements FlexModule {
 
-    private static final ModuleInfo INFO = ModuleInfo.of("playerutils", "Player Utils", "0.6.0")
+    private static final ModuleInfo INFO = ModuleInfo.of("playerutils", "Player Utils", "0.7.0")
             .describedAs("Fly, heal, feed, hurt, drown, launch, scale, speed, wipe, spectate and sudo — and "
                     + "ping, status, hunger, effects, position and who is near. By name, nickname or selector.")
             .by("Raindancer118");
@@ -104,6 +104,19 @@ public final class PlayerUtilsModule implements FlexModule {
                 spectate, sudo, wipeRule, speedRule, now);
         for (var service : List.of(targeting, flight, spectate, sudo, info, actions, reach)) {
             settings.onChange(service::settings);
+        }
+
+        // Screens for /screen — Core 2.10.0; on an older Core there are simply none.
+        try {
+            var screens = context.core().screens();
+            if (screens != null) {
+                new de.raindancer.modules.playerutils.service.PlayerUtilsScreens(server, context.core().vanish(),
+                        context.core().pingHistory(), pings).register(screens, context.plugin());
+                context.closeWith(() -> de.raindancer.modules.playerutils.service.PlayerUtilsScreens.KINDS
+                        .forEach(screens::unregister));
+            }
+        } catch (LinkageError olderCore) {
+            context.log().info("RainsCore is older than 2.10.0: no Player Utils screens until it is updated.");
         }
 
         services = new PlayerUtilsServices(context.plugin(), server, log, messages, context.chat().brand(),
